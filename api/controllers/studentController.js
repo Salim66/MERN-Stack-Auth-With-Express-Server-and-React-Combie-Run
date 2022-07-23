@@ -1,4 +1,5 @@
 import Student from "../models/Student.js";
+import bcrypt from 'bcryptjs';
 
 
 /**
@@ -6,15 +7,15 @@ import Student from "../models/Student.js";
  * @route api/student 
  * @method GET
  */
-export const getAllStudents = async (req, res) => {
+export const getAllStudents = async (req, res, next) => {
     
     try {
         
-        const students = await Student.find();
+        const students = await Student.findd();
         res.status(200).json(students);
 
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 
 } 
@@ -26,13 +27,17 @@ export const getAllStudents = async (req, res) => {
 0 */
 export const createStudent = async (req, res) => {
 
+    // make hash password
+    const salt = await bcrypt.genSalt(10);
+    const hash_pass = await bcrypt.hash(req.body.password, salt);
+
     try {
         
-        const student = await Student.create(req.body);
+        const student = await Student.create({ ...req.body, password: hash_pass });
         res.status(200).json(student);
 
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 
 } 
@@ -52,7 +57,7 @@ export const getSingleStudent = async (req, res) => {
         res.status(200).json(student);
 
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 
 }
@@ -72,7 +77,7 @@ export const updateStudent = async (req, res) => {
         res.status(200).json(student);
 
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 
 }
@@ -92,7 +97,7 @@ export const deleteStudent = async (req, res) => {
         res.status(200).json(student);
 
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 
 

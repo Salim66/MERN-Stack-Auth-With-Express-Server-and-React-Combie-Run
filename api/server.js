@@ -3,6 +3,7 @@ import colors from 'colors';
 import dotenv from 'dotenv';
 import studentRouter from './routes/student.js';
 import mongoDBConnection from './config/db.js';
+import errorHandler from './middleware/errorHandler.js';
 
 
 // initalize express
@@ -19,6 +20,10 @@ const PORT = process.env.SERVER_PORT || 5000;
 
 // Routes
 app.use('/api/student', studentRouter)
+
+
+// Custom error handler
+app.use( errorHandler );
 
 
 // Listen
