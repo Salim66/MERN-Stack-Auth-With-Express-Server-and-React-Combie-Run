@@ -1,3 +1,4 @@
+import Student from "../models/Student.js";
 
 
 /**
@@ -5,8 +6,17 @@
  * @route api/student 
  * @method GET
  */
-export const getAllStudents = (req, res) => {
-    res.send('Get All Students')
+export const getAllStudents = async (req, res) => {
+    
+    try {
+        
+        const students = await Student.find();
+        res.status(200).json(students);
+
+    } catch (error) {
+        console.log(error);
+    }
+
 } 
 
 /**
@@ -14,8 +24,17 @@ export const getAllStudents = (req, res) => {
  * @route api/student 
  * @method POST
 0 */
-export const createStudent = (req, res) => {
-    res.send('Create Student');
+export const createStudent = async (req, res) => {
+
+    try {
+        
+        const student = await Student.create(req.body);
+        res.status(200).json(student);
+
+    } catch (error) {
+        console.log(error);
+    }
+
 } 
 
 /**
@@ -23,8 +42,19 @@ export const createStudent = (req, res) => {
  * @route api/student/id 
  * @method GET
  */
-export const getSingleStudent = (req, res) => {
-    res.send('Get Single Student');
+export const getSingleStudent = async (req, res) => {
+
+    try {
+        
+        let { id } = req.params;
+
+        const student = await Student.findById(id);
+        res.status(200).json(student);
+
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 /**
@@ -32,8 +62,19 @@ export const getSingleStudent = (req, res) => {
  * @route api/student/id
  * @method PUT
  */
-export const updateStudent = (req, res) => {
-    res.send('Update Student');
+export const updateStudent = async (req, res) => {
+    
+    try {
+        
+        let { id } = req.params;
+
+        const student = await Student.findByIdAndUpdate(id, req.body, { new: true });
+        res.status(200).json(student);
+
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 /**
@@ -41,6 +82,18 @@ export const updateStudent = (req, res) => {
  * @route api/student/id 
  * @method DELETE 
  */
-export const deleteStudent = (res, req) => {
-    res.send('Delete Student');
+export const deleteStudent = async (req, res) => {
+    
+    try {
+        
+        let { id } = req.params;
+
+        const student = await Student.findByIdAndDelete(id);
+        res.status(200).json(student);
+
+    } catch (error) {
+        console.log(error);
+    }
+
+
 }

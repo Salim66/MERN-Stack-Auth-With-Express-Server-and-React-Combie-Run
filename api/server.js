@@ -10,8 +10,6 @@ const app = express();
 // Configure dotenv
 dotenv.config();
 
-mongoDBConnection();
-
 // middleware permision
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
@@ -25,5 +23,6 @@ app.use('/api/student', studentRouter)
 
 // Listen
 app.listen(PORT, () => {
+    mongoDBConnection();
     console.log(`server on running on port ${ PORT }`.bgGreen.black);
 })
