@@ -2,6 +2,7 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
 import createError from './errorController.js';
+import jwt from 'jsonwebtoken';
 
 
 /**
@@ -123,7 +124,39 @@ export const deleteUser = async (req, res, next) => {
 0 */
 export const userLogin = async (req, res, next) => {
 
-    res.send('Logged in user');
+    try {
+
+        // check user is has or not by email
+        const login_user = await User.findOne({ email: req.body.email });
+
+        // User is not found by email
+        if(!login_user){
+            return next(createError(404, 'User not found!'));
+        }
+
+        // Check user password match or not
+        const check_pass = await bcrypt.compare(req.body.password, login_user.password);
+
+        // If Password Not Match
+        if(!check_pass){
+            return next(createError(404, 'Wrong Password'));
+        }
+
+        // Create a token
+        const token = jwt.sign({ id: login_user._id, isAdmin: login_user.isAdmin }, process.env.JWT_SECRET);
+
+        // login user info
+        const { password, isAdmin, ...login_info } = login_user._doc;
+
+        res.status(200).json({
+            token: token,
+            user: login_info
+        });
+
+        
+    } catch (error) {
+        next(error);
+    }
 
 } 
 
