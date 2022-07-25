@@ -1,5 +1,6 @@
 import Student from "../models/Student.js";
 import bcrypt from 'bcryptjs';
+import createError from "./errorController.js";
 
 
 /**
@@ -11,7 +12,7 @@ export const getAllStudents = async (req, res, next) => {
     
     try {
         
-        const students = await Student.findd();
+        const students = await Student.find();
         res.status(200).json(students);
 
     } catch (error) {
@@ -25,7 +26,7 @@ export const getAllStudents = async (req, res, next) => {
  * @route api/student 
  * @method POST
 0 */
-export const createStudent = async (req, res) => {
+export const createStudent = async (req, res, next) => {
 
     // make hash password
     const salt = await bcrypt.genSalt(10);
@@ -47,14 +48,22 @@ export const createStudent = async (req, res) => {
  * @route api/student/id 
  * @method GET
  */
-export const getSingleStudent = async (req, res) => {
+export const getSingleStudent = async (req, res, next) => {
 
     try {
         
         let { id } = req.params;
 
         const student = await Student.findById(id);
-        res.status(200).json(student);
+
+        if(!student){
+            return next(createError(404, 'Single Student Not Found!'));
+        }
+
+        if(student){
+            res.status(200).json(student);
+        }
+
 
     } catch (error) {
         next(error);
@@ -67,7 +76,7 @@ export const getSingleStudent = async (req, res) => {
  * @route api/student/id
  * @method PUT
  */
-export const updateStudent = async (req, res) => {
+export const updateStudent = async (req, res, next) => {
     
     try {
         
@@ -87,7 +96,7 @@ export const updateStudent = async (req, res) => {
  * @route api/student/id 
  * @method DELETE 
  */
-export const deleteStudent = async (req, res) => {
+export const deleteStudent = async (req, res, next) => {
     
     try {
         
