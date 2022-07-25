@@ -112,3 +112,40 @@ export const deleteUser = async (req, res, next) => {
 
 
 }
+
+
+// Login User
+
+/**
+ * @access public
+ * @route api/user/login 
+ * @method POST
+0 */
+export const userLogin = async (req, res, next) => {
+
+    res.send('Logged in user');
+
+} 
+
+
+/**
+ * @access public
+ * @route api/user/register
+ * @method POST
+0 */
+export const userRegister = async (req, res, next) => {
+
+    // make hash password
+    const salt = await bcrypt.genSalt(10);
+    const hash_pass = await bcrypt.hash(req.body.password, salt);
+
+    try {
+        
+        const user = await User.create({ ...req.body, password: hash_pass });
+        res.status(200).json(user);
+
+    } catch (error) {
+        next(error);
+    }
+
+} 
