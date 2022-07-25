@@ -5,6 +5,7 @@ import studentRouter from './routes/student.js';
 import userRouter from './routes/user.js';
 import mongoDBConnection from './config/db.js';
 import errorHandler from './middleware/errorHandler.js';
+import cookieParser from 'cookie-parser';
 
 
 // initalize express
@@ -15,6 +16,7 @@ dotenv.config();
 // middleware permision
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser());
 
 // initialize environmet 
 const PORT = process.env.SERVER_PORT || 5000;

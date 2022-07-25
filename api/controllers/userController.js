@@ -148,7 +148,7 @@ export const userLogin = async (req, res, next) => {
         // login user info
         const { password, isAdmin, ...login_info } = login_user._doc;
 
-        res.status(200).json({
+        res.cookie("access_token", token).status(200).json({
             token: token,
             user: login_info
         });
