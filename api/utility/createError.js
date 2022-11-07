@@ -1,5 +1,3 @@
-
-
 // Create custom error controller
 const createError = (status, msg) => {
     const err = new Error;
